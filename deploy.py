@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Deploy todo-appen via FTP (python ftplib).
+"""Deploy todo-appen til aogj.com/todo via FTP (python ftplib).
 Host/bruger/adgangskode læses fra en lokal .ftp-credentials (ikke i git).
-  python3 deploy.py move-old   # omdøb eksisterende remote-mappe -> *-old (én gang)
-  python3 deploy.py            # upload site/ til remote-mappen
+  python3 deploy.py move-old   # omdøb eksisterende /todo -> /todo-old (én gang)
+  python3 deploy.py            # upload site/ -> /todo
 """
 import ftplib, os, sys, time
 
@@ -53,5 +53,5 @@ if __name__ == "__main__":
     else:
         print(f"Uploader site/ -> ftp://{HOST}{REMOTE}/ ...")
         upload(f, LOCAL, REMOTE)
-        print("Færdig.")
+        print("Færdig -> https://aogj.com/todo")
     f.quit()
