@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AOGJ's to-do</title>
-<link rel="stylesheet" href="style.css?v=15">
+<link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 <header>
@@ -65,7 +65,7 @@
     <div class="controls">
       <label>Sortér:
         <select id="sort">
-          <option value="score">Score (vigtig + hurtig)</option>
+          <option value="point">Point (mest værd)</option>
           <option value="prio">Kun prioritet</option>
           <option value="time">Tid (kortest først)</option>
           <option value="new">Nyeste</option>
@@ -118,8 +118,8 @@
       <li><b>➕ Ny:</b> Den ene skriver en idé + sin egen prioritet og tid.</li>
       <li><b>⏳ Til vurdering:</b> Den anden giver så <i>sin</i> prioritet og tid. (Du får en rød
         notifikation når der venter noget på dig.)</li>
-      <li><b>📋 Puljen:</b> Når I begge har vurderet, lander opgaven her — sorteret efter score.
-        Her <b>tildeler</b> I den til Allan eller Jette.</li>
+      <li><b>📋 Puljen:</b> Når I begge har vurderet, lander opgaven her — sorteret efter point
+        (mest værd øverst). Her <b>tildeler</b> I den til Allan eller Jette.</li>
       <li><b>⚖️ Fordeling:</b> Viser hvem der har hvilke opgaver (Planlagt) og hvad der er
         gjort færdigt (Udført) — med point.</li>
       <li>Når en opgave er udført, trykker man <b>✓ Færdig</b> (inde i opgavens detaljer) → 🎉 point!</li>
@@ -130,21 +130,27 @@
       tror). <b>0 betyder “ikke en fælles opgave”</b> — så slipper du for at sætte tid, og den lander
       nederst. Hvis I er meget uenige (≥2 forskel), markeres den med ⚠️, så I kan snakke om den.</p>
 
-    <h3>4. De to tal: ⚡ Score og 🏅 Point</h3>
-    <p>Begge bygger på <b>prioritet</b> og <b>tid</b>, men gør hver sit:</p>
+    <h3>4. 🏅 Point — ét tal der styrer det hele</h3>
+    <p>Hver opgave får et <b>point-tal</b> der viser hvor <b>værdifuld</b> den er. Det bruges til
+      både rækkefølgen i puljen (mest værd øverst) og som de point I <b>farmer</b>.</p>
     <ul>
-      <li><b>⚡ Score = prioritet ÷ tid.</b> Bestemmer <i>rækkefølgen</i> i puljen — vigtigt + hurtigt øverst.</li>
-      <li><b>🏅 Point = prioritet × tid.</b> Er <i>belønningen</i> man får for at udføre opgaven.</li>
+      <li><b>Vigtighed vejer tungest</b> — en vigtig opgave er meget mere værd end en uvigtig.</li>
+      <li><b>Længere opgaver giver lidt ekstra</b>, men med aftagende effekt — så man ikke kan
+        samle point ved bare at tage lange, ligegyldige opgaver.</li>
     </ul>
-    <p>Derfor er de <b>ikke</b> det samme tal. Eksempel — to opgaver med samme prioritet (5):</p>
+    <p>Eksempel:</p>
     <table class="doctab">
-      <tr><th>Opgave</th><th>Prioritet</th><th>Tid</th><th>⚡ Score</th><th>🏅 Point</th></tr>
-      <tr><td>Skift en pære</td><td>5</td><td>15 min</td><td><b>20</b> (øverst)</td><td>13 (lille)</td></tr>
-      <tr><td>Byg terrasse</td><td>5</td><td>weekend</td><td>0,3 (nederst)</td><td><b>800</b> (stor)</td></tr>
+      <tr><th>Opgave</th><th>Vigtighed</th><th>Tid</th><th>🏅 Point</th></tr>
+      <tr><td>Byg terrasse</td><td>5</td><td>weekend</td><td><b>400</b></td></tr>
+      <tr><td>Skift stikkontakt</td><td>5</td><td>30 min</td><td>71</td></tr>
+      <tr><td>Sortér gammelt papir</td><td>1</td><td>weekend</td><td>16</td></tr>
+      <tr><td>Tøm postkasse</td><td>1</td><td>15 min</td><td>2</td></tr>
     </table>
-    <p>Samme prioritet, men korte opgaver kommer øverst (høj score), mens store opgaver giver flest
-      point. Stillingen øverst (🏆) lægger jeres optjente point sammen — tallet i (parentes) er
-      point I <i>forventer</i> at få fra opgaver I allerede har fået tildelt.</p>
+    <p>Den kedelige weekend-opgave (16) ligger langt under den vigtige hurtige (71) — vigtighed
+      vinder, så man ikke kan farme point med ligegyldige lange opgaver. Stillingen øverst (🏆)
+      lægger jeres optjente point sammen; tallet i (parentes) er point I <i>forventer</i> fra
+      opgaver I allerede har fået tildelt. <b>Målet:</b> del opgaverne så I farmer ~lige mange
+      point. I <b>Fordeling</b> ser I både point og timer pr. person.</p>
 
     <h3>5. Fordeling = lige mange point</h3>
     <p>Idéen er at dele opgaverne, så vi hver især ender med <b>cirka lige mange point</b> — ikke
@@ -172,6 +178,6 @@
 <div id="toast" class="toast" hidden></div>
 <div id="lightbox" class="lightbox" hidden></div>
 <div id="detail" class="modal" hidden><div class="mbox" id="mbox"></div></div>
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>

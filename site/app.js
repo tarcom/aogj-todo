@@ -23,8 +23,7 @@ const fmtH = h => h == null ? "?" : (EST_LBL[h] ?? (Math.round(h * 100) / 100 + 
 const esc = s => (s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const catLbl = k => CATS.find(c => c[0] === k)?.[1] || "Andet";
 const fdate = ts => ts ? new Date(ts * 1000).toLocaleString("da-DK", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
-const POINT_TIP = "Point = gennemsnitlig prioritet × gennemsnitlig tid. Tjenes når opgaven markeres færdig.";
-const SCORE_TIP = "Score = gennemsnitlig prioritet ÷ gennemsnitlig tid. Bestemmer rækkefølgen i puljen — vigtigt + hurtigt øverst.";
+const POINT_TIP = "Point = opgavens værdi: vigtighed vejer tungest, og længere opgaver giver et aftagende bonus. Det er point I farmer — del så I farmer ~lige mange. Tjenes når opgaven markeres færdig.";
 const SCORES_TIP = "Optjente point fra udførte opgaver. Tal i (parentes) = forventede point fra dine tildelte, ikke-udførte opgaver.";
 
 function toast(m) { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(t._h); t._h = setTimeout(() => t.hidden = true, 2200); }
@@ -47,8 +46,8 @@ const shared = t => prioA(t) != null && prioA(t) >= 1 && prioJ(t) != null && pri
 const decided = t => shared(t) || hasZero(t);
 const assignedTo = t => (t.assigned_to === "Allan" || t.assigned_to === "Jette") ? t.assigned_to : null;
 const disagree = t => shared(t) && Math.abs(prioA(t) - prioJ(t)) >= 2;
-const score = t => shared(t) ? combPrio(t) / (avgEst(t) || 0.25) : 0;
-const taskPoints = t => shared(t) ? Math.round(combPrio(t) * avgEst(t) * 10) : 0;
+// Point = værdi: vigtighed² (dominerer → farm-sikkert) × √tid (aftagende bonus). Ét tal til både rækkefølge og belønning.
+const taskPoints = t => shared(t) ? Math.round(combPrio(t) ** 2 * Math.sqrt(avgEst(t) || 0.25) * 4) : 0;
 const other = () => me === "Allan" ? "Jette" : "Allan";
 const stars = n => "★".repeat(Math.round(n)) + "☆".repeat(5 - Math.round(n));
 const r2 = h => Math.round(h * 4) / 4;
@@ -96,7 +95,7 @@ function taskCard(t) {
   let cls = "task"; if (isDone) cls += " done"; else if (isZero) cls += " zero"; else if (!isShared) cls += " pending"; if (disagree(t)) cls += " disagree";
   const badge = isDone ? `<div class="pbadge done" title="Udført">✓</div>`
     : isZero ? `<div class="pbadge zero" title="Ikke en fælles opgave">🚫</div>`
-      : isShared ? `<div class="pbadge" title="${SCORE_TIP}">⚡${score(t).toFixed(1)}</div>`
+      : isShared ? `<div class="pbadge" title="${POINT_TIP}">🏅${taskPoints(t)}</div>`
         : `<div class="pbadge wait" title="Mangler vurdering fra en af jer">⏳</div>`;
   let rate = "";
   if (!isDone && !isZero && !ratedByMe(t)) {
@@ -115,7 +114,6 @@ function taskCard(t) {
       <div class="meta">
         <span class="badge ${t.category}">${catLbl(t.category)}</span>
         <span title="Hvem foreslog opgaven">💡 Oprettet af ${t.created_by}</span>
-        ${isShared && !isDone ? `<span title="${POINT_TIP}">🏅 ${taskPoints(t)}</span>` : ""}
         ${isZero ? `<span class="badge" title="En af jer har sat prioritet 0 – ikke en fælles opgave">🚫 ikke fælles</span>` : ""}
         ${disagree(t) ? `<span class="badge warn" title="I har givet meget forskellig prioritet (≥2 fra hinanden)">⚠️ uenige</span>` : ""}
         ${waitWho && !isDone && !isZero ? `<span class="badge wait" title="${waitWho} har ikke vurderet endnu">⏳ afventer ${waitWho}</span>` : ""}
@@ -139,7 +137,7 @@ function detailHtml(t) {
       <span class="badge ${t.category}">${catLbl(t.category)}</span>
       <span title="Hvem foreslog opgaven">💡 Oprettet af ${t.created_by}</span>
       <span class="badge">${st}</span>
-      ${shared(t) ? `<span title="${SCORE_TIP}">⚡ ${score(t).toFixed(1)}</span><span title="${POINT_TIP}">🏅 ${taskPoints(t)}</span>` : ""}
+      ${shared(t) ? `<span title="${POINT_TIP}">🏅 ${taskPoints(t)} point</span>` : ""}
       ${isDone ? `<span class="badge good">✅ udført af ${t.done_by || "?"} · +${taskPoints(t)} ⭐</span>` : ""}
     </div>
     ${rateRows(t)}
@@ -190,7 +188,7 @@ async function saveEdit(id) {
 function renderPool() {
   const cat = $("#catFilter").value, sort = $("#sort").value;
   let list = tasks.filter(t => t.status !== "done" && decided(t) && !assignedTo(t) && (!cat || t.category === cat));
-  const metric = sort === "new" ? (t => t.created_at) : sort === "prio" ? combPrio : sort === "time" ? (t => -(avgEst(t) || 999)) : score;
+  const metric = sort === "new" ? (t => t.created_at) : sort === "prio" ? combPrio : sort === "time" ? (t => -(avgEst(t) || 999)) : taskPoints;
   list.sort((a, b) => ((hasZero(a) ? 1 : 0) - (hasZero(b) ? 1 : 0)) || (metric(b) - metric(a)) || (b.created_at - a.created_at));
   $("#list").innerHTML = list.length ? list.map(taskCard).join("")
     : `<p class="empty">Ingen ufordelte opgaver. Lav en under «Ny», tjek «Til vurdering», eller se «Fordeling».</p>`;
