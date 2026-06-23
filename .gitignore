@@ -1,0 +1,12 @@
+# Hemmeligheder
+.ftp-credentials
+
+# Runtime-data (database + uploads) — må ikke i git
+site/storage/*
+!site/storage/.htaccess
+site/uploads/*
+!site/uploads/.htaccess
+
+# Diverse
+*.log
+.DS_Store
