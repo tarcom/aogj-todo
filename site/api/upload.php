@@ -3,10 +3,10 @@
 require __DIR__ . '/db.php';
 
 $tid = (int)($_POST['task_id'] ?? 0);
-$u   = $_POST['user'] ?? '';
+$u   = in_array($_POST['user'] ?? '', USERS, true) ? $_POST['user'] : '';
 $cap = trim($_POST['caption'] ?? '');
 
-if (!$tid || !in_array($u, USERS, true) || empty($_FILES['file'])) {
+if (!$tid || empty($_FILES['file'])) {
     json_out(['error' => 'mangler data (filen er måske for stor for serveren)']);
 }
 $f = $_FILES['file'];

@@ -187,3 +187,36 @@ button.ghost.small{font-size:.85rem;padding:7px 12px}
   .task .meta{font-size:.76rem}
   .top{gap:8px}
 }
+
+/* ===== v17 forenklet layout ===== */
+.balance2{margin-top:10px;font-size:.92rem;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.balance2 b.a{color:var(--allan)} .balance2 b.j{color:var(--jette)}
+.block{margin-bottom:16px}
+.vh.toggle{cursor:pointer;user-select:none}
+.col h4.colhead{margin:0 0 8px;font-size:.98rem}
+.asglist{display:flex;flex-direction:column;gap:6px}
+.achip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.92rem}
+.achip .sz{flex:0 0 auto;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:.72rem;font-weight:800;background:#0e1526;border:1px solid var(--line);color:var(--accent2)}
+.achip .t{flex:1;min-width:0;cursor:pointer;word-break:break-word}
+.achip .by{color:var(--muted);font-size:.8rem}
+.achip .done{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:var(--good);border-radius:8px;padding:3px 9px;cursor:pointer;font-size:.95rem}
+.achip .done:hover{background:var(--good);color:#04221a}
+.achip.is-done .t{text-decoration:line-through;color:var(--muted)}
+
+/* opgavekort i listen (kolonne-layout, overstyrer det gamle flex) */
+.task{display:block;cursor:default}
+.task .trow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.task .ttl{font-weight:600;font-size:1rem;cursor:pointer;word-break:break-word}
+.szbadge{flex:0 0 auto;min-width:30px;height:28px;border-radius:8px;border:1px solid var(--line);background:#0e1526;color:var(--accent2);font-weight:800;cursor:pointer}
+.szbadge:hover{border-color:var(--accent)}
+.camtag{display:inline-block;margin-top:4px;font-size:.78rem;color:var(--muted);cursor:pointer}
+.pgrid{display:grid;grid-template-columns:auto 1fr;gap:7px 10px;align-items:center;margin-top:9px}
+.pl{font-size:.85rem;font-weight:700}
+.pl.a{color:var(--allan)} .pl.j{color:var(--jette)}
+.chips.prio button.on.p0{background:#475569;border-color:#475569;color:#fff}
+.chips.prio button.on.p1{background:#f59e0b;border-color:#f59e0b;color:#1a1300}
+.chips.prio button.on.p2{background:#10b981;border-color:#10b981;color:#04221a}
+.arow{margin-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.mini{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:.9rem}
+.mini:hover{color:var(--ink)}
+.mbox .field{margin-bottom:10px}

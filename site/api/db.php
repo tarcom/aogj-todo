@@ -24,6 +24,7 @@ function db(): PDO {
         assigned_at INTEGER
     )");
     try { $pdo->exec("ALTER TABLE tasks ADD COLUMN assigned_at INTEGER"); } catch (\Throwable $e) { /* findes allerede */ }
+    try { $pdo->exec("ALTER TABLE tasks ADD COLUMN size INTEGER DEFAULT 2"); } catch (\Throwable $e) { /* findes allerede */ }
     $pdo->exec("CREATE TABLE IF NOT EXISTS attachments(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         task_id INTEGER,

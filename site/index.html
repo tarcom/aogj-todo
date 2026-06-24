@@ -4,180 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AOGJ's to-do</title>
-<link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 <header>
   <div class="top">
     <h1>🏡 AOGJ's to-do</h1>
-    <div class="whoami">
-      <span class="lbl">Du er:</span>
-      <button class="who" data-user="Allan">Allan</button>
-      <button class="who" data-user="Jette">Jette</button>
-    </div>
+    <button id="newBtn" class="primary small">➕ Ny opgave</button>
   </div>
-  <nav class="tabs">
-    <button class="tab" data-view="dist">⚖️ Fordeling</button>
-    <button class="tab" data-view="need">⏳ Til vurdering<span id="needBadge" class="nbadge" hidden>0</span></button>
-    <button class="tab" data-view="pool">📋 Puljen</button>
-    <button class="tab" data-view="new">➕ Ny</button>
-    <button class="tab" data-view="help">❓ Hjælp</button>
-  </nav>
-  <div id="scores" class="scores"></div>
+  <div id="balance" class="balance2"></div>
 </header>
 
-<div id="gate" class="gate" hidden>
-  <div class="gatebox">
-    <div class="gicon">🏡</div>
-    <h2>AOGJ's to-do</h2>
-    <p>Hvem er du?</p>
-    <div class="gatebtns">
-      <button class="who big" data-user="Allan">Allan</button>
-      <button class="who big" data-user="Jette">Jette</button>
-    </div>
-  </div>
-</div>
-
 <main>
-  <!-- NY OPGAVE -->
-  <section id="newView" class="view" hidden>
-    <div class="card add">
-      <input id="t-title" class="title-in" type="text" placeholder="Ny idé… (fx «Mal hækken», «Saml reol»)" maxlength="120">
-      <div class="row">
-        <div class="field"><label>Kategori</label><div id="t-cat" class="chips cat"></div></div>
-      </div>
-      <div class="row">
-        <div class="field"><label>Din prioritet <span class="sub">(0 = ikke fælles · 5 = højest)</span></label><div id="t-prio" class="chips prio"></div></div>
-        <div class="field"><label>Din tid <span class="sub">(droppes ved prioritet 0)</span></label><div id="t-est" class="chips est"></div></div>
-      </div>
-      <textarea id="t-note" class="note-in" rows="1" placeholder="Note (valgfri)"></textarea>
-      <div class="field"><label>Billede <span class="sub">(valgfri — åbner kamera på mobil)</span></label>
-        <label class="upl wide" title="Tag et billede eller vælg fra galleri">📷 Tilføj billede<input id="t-photo" type="file" accept="image/*,video/*" capture="environment" hidden></label>
-        <span id="addPhotoName" class="sub"></span>
-      </div>
-      <button id="addBtn" class="primary">+ Tilføj til puljen</button>
-      <p class="hint" style="margin:.6em 0 0">Den ryger i puljen når den anden også har vurderet den.</p>
-    </div>
-  </section>
-
-  <!-- PULJE -->
-  <section id="poolView" class="view" hidden>
-    <div class="controls">
-      <label>Sortér:
-        <select id="sort">
-          <option value="point">Point (mest værd)</option>
-          <option value="prio">Kun prioritet</option>
-          <option value="time">Tid (kortest først)</option>
-          <option value="new">Nyeste</option>
-        </select>
-      </label>
-      <label class="catfilt">Kategori:
-        <select id="catFilter"><option value="">Alle</option><option value="hus">Hus</option><option value="have">Have</option><option value="andet">Andet</option></select>
-      </label>
-    </div>
-    <div id="list" class="list"></div>
-  </section>
-
-  <!-- TIL VURDERING -->
-  <section id="needView" class="view" hidden>
-    <h3 class="vh" id="needMineH" hidden>🔔 Afventer din vurdering</h3>
-    <div id="needMine" class="list"></div>
-    <h3 class="vh" id="needOtherH" hidden>⏳ Venter på den anden</h3>
-    <div id="needOther" class="list"></div>
-    <p id="needEmpty" class="empty" hidden>Intet at vurdere lige nu 🎉</p>
-  </section>
-
-  <!-- FORDELING (statisk: planlagt + udført) -->
-  <section id="distView" class="view" hidden>
-    <h3 class="vh">📌 Planlagt (tildelt)</h3>
-    <div id="balance" class="balance"></div>
+  <section class="block">
+    <h3 class="vh">👤 Hvem har hvad</h3>
     <div class="cols">
-      <div class="col"><h3 class="colhead" data-u="Allan">Allan <span class="tot" id="tot-Allan"></span></h3><div id="col-Allan" class="dropcol static"></div></div>
-      <div class="col"><h3 class="colhead" data-u="Jette">Jette <span class="tot" id="tot-Jette"></span></h3><div id="col-Jette" class="dropcol static"></div></div>
+      <div class="col"><h4 class="colhead" data-u="Allan">Allan <span class="tot" id="sum-Allan"></span></h4><div id="asg-Allan" class="asglist"></div></div>
+      <div class="col"><h4 class="colhead" data-u="Jette">Jette <span class="tot" id="sum-Jette"></span></h4><div id="asg-Jette" class="asglist"></div></div>
     </div>
-    <h3 class="vh" style="margin-top:18px">✅ Udført</h3>
-    <div class="cols">
-      <div class="col"><h3 class="colhead" data-u="Allan">Allan <span class="tot" id="dtot-Allan"></span></h3><div id="dcol-Allan" class="dropcol static"></div></div>
-      <div class="col"><h3 class="colhead" data-u="Jette">Jette <span class="tot" id="dtot-Jette"></span></h3><div id="dcol-Jette" class="dropcol static"></div></div>
-    </div>
-    <p class="hint">Tryk på en opgave for detaljer. Tildeling sker under «Puljen» (eller i detaljerne).</p>
   </section>
 
-  <!-- HJÆLP -->
-  <section id="helpView" class="view doc" hidden>
-    <h2>👋 Velkommen til AOGJ's to-do</h2>
-    <p>En fælles liste over alt det vi gerne vil have lavet i huset og haven — hvor vi <b>begge</b>
-      er med til at bestemme hvad der er vigtigst, og hvor vi deler opgaverne retfærdigt.</p>
+  <section class="block">
+    <h3 class="vh">📝 Skal prioriteres</h3>
+    <div id="needList" class="list"></div>
+    <p id="needEmpty" class="empty" hidden>Alt er prioriteret 🎉</p>
+  </section>
 
-    <h3>1. Sig hvem du er</h3>
-    <p>Øverst til højre vælger du <b>Allan</b> eller <b>Jette</b>. Det styrer dine vurderinger og
-      hvem der får point. Tjek altid at det rigtige navn er valgt 🙂</p>
+  <section class="block">
+    <h3 class="vh">📋 Opgaver <span class="sub">(sorteret efter prioritet)</span></h3>
+    <div id="poolList" class="list"></div>
+    <p id="poolEmpty" class="empty" hidden>Ingen opgaver klar — tildel eller tilføj en ny.</p>
+  </section>
 
-    <h3>2. Sådan kører en opgave</h3>
-    <ol>
-      <li><b>➕ Ny:</b> Den ene skriver en idé + sin egen prioritet og tid.</li>
-      <li><b>⏳ Til vurdering:</b> Den anden giver så <i>sin</i> prioritet og tid. (Du får en rød
-        notifikation når der venter noget på dig.)</li>
-      <li><b>📋 Puljen:</b> Når I begge har vurderet, lander opgaven her — sorteret efter point
-        (mest værd øverst). Her <b>tildeler</b> I den til Allan eller Jette.</li>
-      <li><b>⚖️ Fordeling:</b> Viser hvem der har hvilke opgaver (Planlagt) og hvad der er
-        gjort færdigt (Udført) — med point.</li>
-      <li>Når en opgave er udført, trykker man <b>✓ Færdig</b> (inde i opgavens detaljer) → 🎉 point!</li>
-    </ol>
-
-    <h3>3. Prioritet (0–5)</h3>
-    <p>Hvor vigtig synes <i>du</i> opgaven er? <b>OBS: 5 er højest</b> (modsat hvad man nogle gange
-      tror). <b>0 betyder “ikke en fælles opgave”</b> — så slipper du for at sætte tid, og den lander
-      nederst. Hvis I er meget uenige (≥2 forskel), markeres den med ⚠️, så I kan snakke om den.</p>
-
-    <h3>4. 🏅 Point — ét tal der styrer det hele</h3>
-    <p>Hver opgave får et <b>point-tal</b> der viser hvor <b>værdifuld</b> den er. Det bruges til
-      både rækkefølgen i puljen (mest værd øverst) og som de point I <b>farmer</b>.</p>
-    <ul>
-      <li><b>Vigtighed vejer tungest</b> — en vigtig opgave er meget mere værd end en uvigtig.</li>
-      <li><b>Længere opgaver giver lidt ekstra</b>, men med aftagende effekt — så man ikke kan
-        samle point ved bare at tage lange, ligegyldige opgaver.</li>
-    </ul>
-    <p>Eksempel:</p>
-    <table class="doctab">
-      <tr><th>Opgave</th><th>Vigtighed</th><th>Tid</th><th>🏅 Point</th></tr>
-      <tr><td>Byg terrasse</td><td>5</td><td>weekend</td><td><b>400</b></td></tr>
-      <tr><td>Skift stikkontakt</td><td>5</td><td>30 min</td><td>71</td></tr>
-      <tr><td>Sortér gammelt papir</td><td>1</td><td>weekend</td><td>16</td></tr>
-      <tr><td>Tøm postkasse</td><td>1</td><td>15 min</td><td>2</td></tr>
-    </table>
-    <p>Den kedelige weekend-opgave (16) ligger langt under den vigtige hurtige (71) — vigtighed
-      vinder, så man ikke kan farme point med ligegyldige lange opgaver. Stillingen øverst (🏆)
-      lægger jeres optjente point sammen; tallet i (parentes) er point I <i>forventer</i> fra
-      opgaver I allerede har fået tildelt. <b>Målet:</b> del opgaverne så I farmer ~lige mange
-      point. I <b>Fordeling</b> ser I både point og timer pr. person.</p>
-
-    <h3>5. Fordeling = lige mange point</h3>
-    <p>Idéen er at dele opgaverne, så vi hver især ender med <b>cirka lige mange point</b> — ikke
-      nødvendigvis lige mange opgaver. Én stor opgave kan altså opveje flere små.</p>
-
-    <h3>6. Detaljer, redigér, foto, slet</h3>
-    <ul>
-      <li><b>Tryk på en opgave</b> for at se alt om den.</li>
-      <li><b>✎ Redigér</b> kan ændre titel, kategori, note og <i>begges</i> prioritet/tid (handy når I sidder sammen).</li>
-      <li><b>📷</b> Læg billeder/video på en opgave — fx før/efter.</li>
-      <li><b>🗑 Slet</b> ligger kun inde i detaljer og spørger altid om bekræftelse. Vil du bare af
-        med den uden at slette, så giv den prioritet 0.</li>
-    </ul>
-
-    <h3>7. Godt at vide</h3>
-    <ul>
-      <li>Siden opdaterer sig selv — I ser hinandens ændringer automatisk.</li>
-      <li>Den virker på mobilen; læg den evt. på hjemmeskærmen.</li>
-      <li>Der logges <b>ikke</b> hvor lang tid noget faktisk tog — kun jeres estimater.</li>
-    </ul>
-    <p class="hint">Spørgsmål eller noget der driller? Sig til Allan 😊</p>
+  <section class="block">
+    <h3 class="vh toggle" id="doneToggle">✅ Udført <span id="doneCount" class="sub"></span></h3>
+    <div id="doneList" class="list" hidden></div>
   </section>
 </main>
+
+<!-- Ny opgave -->
+<div id="newModal" class="modal" hidden><div class="mbox">
+  <button class="mclose" data-newclose title="Luk">×</button>
+  <h3 class="mttl">Ny opgave</h3>
+  <input id="t-title" class="title-in" type="text" placeholder="Hvad skal laves?" maxlength="120">
+  <div class="field"><label>Kategori</label><div id="t-cat" class="chips cat"></div></div>
+  <div class="field"><label>Størrelse</label><div id="t-size" class="chips size"></div></div>
+  <div class="field"><label>Prioritet <span class="sub">(valgfri — kan også sættes i listen)</span></label>
+    <div class="pgrid">
+      <span class="pl a">Allan</span><div id="t-pa" class="chips prio"></div>
+      <span class="pl j">Jette</span><div id="t-pj" class="chips prio"></div>
+    </div>
+  </div>
+  <textarea id="t-note" class="note-in" rows="1" placeholder="Note (valgfri)"></textarea>
+  <label class="upl wide" title="Tag et billede eller vælg fra galleri">📷 Billede<input id="t-photo" type="file" accept="image/*,video/*" capture="environment" hidden></label>
+  <span id="addPhotoName" class="sub"></span>
+  <button id="addBtn" class="primary">+ Tilføj</button>
+</div></div>
 
 <div id="toast" class="toast" hidden></div>
 <div id="lightbox" class="lightbox" hidden></div>
 <div id="detail" class="modal" hidden><div class="mbox" id="mbox"></div></div>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=17"></script>
 </body>
 </html>
